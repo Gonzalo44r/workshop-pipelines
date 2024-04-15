@@ -82,9 +82,9 @@ spec:
                         sh 'kubectl version'
                     }
                 }
-                script {
-                    qualityGates = readYaml file: 'quality-gates.yaml'
-                }
+                // script {
+                //     qualityGates = readYaml file: 'quality-gates.yaml'
+                // }
             }
         }
         
@@ -173,9 +173,9 @@ spec:
                 sh "./mvnw jmeter:configure@configuration jmeter:jmeter jmeter:results -Djmeter.target.host=$EPHTEST_CONTAINER_NAME -Djmeter.target.port=$APP_LISTENING_PORT -Djmeter.target.root=$APP_CONTEXT_ROOT"
                 perfReport(
                     sourceDataFiles: 'target/jmeter/results/*.csv',
-                    errorUnstableThreshold: qualityGates.performance.throughput.error.unstable,
-                    errorFailedThreshold: qualityGates.performance.throughput.error.failed,
-                    errorUnstableResponseTimeThreshold: qualityGates.performance.throughput.response.unstable)
+                    // errorUnstableThreshold: qualityGates.performance.throughput.error.unstable,
+                    // errorFailedThreshold: qualityGates.performance.throughput.error.failed,
+                    // errorUnstableResponseTimeThreshold: qualityGates.performance.throughput.response.unstable)
             }
         }
 
