@@ -47,7 +47,7 @@ spec:
         APP_LISTENING_PORT = '8080'
         APP_JACOCO_PORT = '6300'
         CONTAINER_REGISTRY_URL = 'docker.io'
-        IMAGE_ORG = '<YOUR_ORG_NAME>' // change it to your own organization at Docker.io!
+        IMAGE_ORG = 'Gonzalo44R' // change it to your own organization at Docker.io!
         IMAGE_NAME = "$IMAGE_ORG/$APP_NAME"
         IMAGE_SNAPSHOT = "$IMAGE_NAME:$APP_VERSION-snapshot-$BUILD_NUMBER" // tag for snapshot version
         IMAGE_SNAPSHOT_LATEST = "$IMAGE_NAME:latest-snapshot" // tag for latest snapshot version
@@ -150,6 +150,7 @@ spec:
             }
         }
 
+        //STAGE 8 - INTEGRATION TESTS
         stage('Integration tests') {
             steps {
                 echo '-=- execute integration tests -=-'
@@ -163,17 +164,49 @@ spec:
             }
         }
 
+        //STAGE 9 - PERFORMANCE TESTS
         stage('Performance tests') {
             steps {
                 echo '-=- execute performance tests -=-'
                 sh "curl --retry 10 --retry-connrefused --connect-timeout 5 --max-time 5 ${EPHTEST_BASE_URL}actuator/health"
                 sh "./mvnw jmeter:configure@configuration jmeter:jmeter jmeter:results -Djmeter.target.host=$EPHTEST_CONTAINER_NAME -Djmeter.target.port=$APP_LISTENING_PORT -Djmeter.target.root=$APP_CONTEXT_ROOT"
-                perfReport sourceDataFiles: 'target/jmeter/results/*.csv'
+                perfReport(
+                    sourceDataFiles: 'target/jmeter/results/*.csv',
+                    errorUnstableThreshold: qualityGates.performance.throughput.error.unstable,
+                    errorFailedThreshold: qualityGates.performance.throughput.error.failed,
+                    errorUnstableResponseTimeThreshold: qualityGates.performance.throughput.response.unstable)
             }
         }
-        ...
+
+        //STAGE 10 [FINAL] - PROMOTE CONTAINER IMAGE
+        stage('Promote container image') {
+            steps {
+                echo '-=- promote container image -=-'
+                container('podman') {
+                    // when using latest or a non-snapshot tag to deploy GA version
+                    // this tag push should trigger the change in staging/production environment
+                    sh "podman tag $IMAGE_SNAPSHOT $CONTAINER_REGISTRY_URL/$IMAGE_GA"
+                    sh "podman push $CONTAINER_REGISTRY_URL/$IMAGE_GA"
+                    sh "podman tag $IMAGE_SNAPSHOT $CONTAINER_REGISTRY_URL/$IMAGE_GA_LATEST"
+                    sh "podman push $CONTAINER_REGISTRY_URL/$IMAGE_GA_LATEST"
+                }
+            }
+        }
     }
-    ...
+    
+    //CLEAN UP RESOURCES
+    post {
+        always {
+            echo '-=- stop test container and remove deployment -=-'
+            container('kubectl') {
+                withKubeConfig([credentialsId: "$KUBERNETES_CLUSTER_CRED_ID"]) {
+                    sh "kubectl delete pod $EPHTEST_CONTAINER_NAME"
+                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME"
+                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME-jacoco"
+                }
+            }
+        }
+    }
 }
 
 def getPomVersion() {
