@@ -51,7 +51,7 @@ spec:
         IMAGE_NAME = "$IMAGE_ORG/$APP_NAME"// "IMAGEORG/$APP_NAME"
         IMAGE_SNAPSHOT = "$IMAGE_NAME:$APP_VERSION-snapshot-$BUILD_NUMBER" // tag for snapshot version
         IMAGE_SNAPSHOT_LATEST = "$IMAGE_NAME:latest-snapshot" // tag for latest snapshot version
-        IMAGE_GA = "$APP_VERSION" // tag for GA version ($IMAGE_NAME:APP VERSION)
+        IMAGE_GA = "$IMAGE_NAME:$APP_VERSION" // tag for GA version ($IMAGE_NAME:APP VERSION)
         IMAGE_GA_LATEST = "$IMAGE_NAME:latest" // tag for latest GA version
         EPHTEST_CONTAINER_NAME = "ephtest-$APP_NAME-snapshot-$BUILD_NUMBER"
         
