@@ -57,8 +57,8 @@ spec:
         EPHTEST_BASE_URL = "http://$EPHTEST_CONTAINER_NAME:$APP_LISTENING_PORT".concat("/$APP_CONTEXT_ROOT".replace('//', '/'))
 
         // credentials
-        KUBERNETES_CLUSTER_CRED_ID = 'k3s-lima-vm-kubeconfig'
-        CONTAINER_REGISTRY_CRED = credentials("docker-hub-$IMAGE_ORG")
+        KUBERNETES_CLUSTER_CRED_ID = 'kube-config'
+        CONTAINER_REGISTRY_CRED = credentials("gonzalo44r-dockerhub")
     }
 
     stages {
@@ -197,14 +197,12 @@ spec:
     //CLEAN UP RESOURCES
     post {
         always {
-            node {
-                echo '-=- stop test container and remove deployment -=-'
-                container('kubectl') {
-                    withKubeConfig([credentialsId: "$KUBERNETES_CLUSTER_CRED_ID"]) {
-                        sh "kubectl delete pod $EPHTEST_CONTAINER_NAME"
-                        sh "kubectl delete service $EPHTEST_CONTAINER_NAME"
-                        sh "kubectl delete service $EPHTEST_CONTAINER_NAME-jacoco"
-                    }
+            echo '-=- stop test container and remove deployment -=-'
+            container('kubectl') {
+                withKubeConfig([credentialsId: "$KUBERNETES_CLUSTER_CRED_ID"]) {
+                    sh "kubectl delete pod $EPHTEST_CONTAINER_NAME"
+                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME"
+                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME-jacoco"
                 }
             }
         }
