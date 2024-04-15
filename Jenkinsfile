@@ -200,9 +200,9 @@ spec:
             echo '-=- stop test container and remove deployment -=-'
             container('kubectl') {
                 withKubeConfig([credentialsId: "$KUBERNETES_CLUSTER_CRED_ID"]) {
-                    sh "kubectl delete pod $EPHTEST_CONTAINER_NAME"
-                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME"
-                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME-jacoco"
+                    sh "kubectl delete pod $EPHTEST_CONTAINER_NAME || echo FAILED KUBECTL delete pod"
+                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME || echo FAILED KUBECTL delete service"
+                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME-jacoco || echo FAILED KUBECTL delete service - jacoco"
                 }
             }
         }
