@@ -175,7 +175,8 @@ spec:
                     sourceDataFiles: 'target/jmeter/results/*.csv',
                     // errorUnstableThreshold: qualityGates.performance.throughput.error.unstable,
                     // errorFailedThreshold: qualityGates.performance.throughput.error.failed,
-                    // errorUnstableResponseTimeThreshold: qualityGates.performance.throughput.response.unstable)
+                    // errorUnstableResponseTimeThreshold: qualityGates.performance.throughput.response.unstable
+                )
             }
         }
 
