@@ -54,6 +54,7 @@ spec:
         IMAGE_GA = "$APP_VERSION" // tag for GA version ($IMAGE_NAME:APP VERSION)
         IMAGE_GA_LATEST = "$IMAGE_NAME:latest" // tag for latest GA version
         EPHTEST_CONTAINER_NAME = "ephtest-$APP_NAME-snapshot-$BUILD_NUMBER"
+        
         EPHTEST_BASE_URL = "http://$EPHTEST_CONTAINER_NAME:$APP_LISTENING_PORT".concat("/$APP_CONTEXT_ROOT".replace('//', '/'))
 
         // credentials
@@ -200,9 +201,9 @@ spec:
             echo '-=- stop test container and remove deployment -=-'
             container('kubectl') {
                 withKubeConfig([credentialsId: "$KUBERNETES_CLUSTER_CRED_ID"]) {
-                    sh "sleep 150 && kubectl delete pod $EPHTEST_CONTAINER_NAME || echo FAILED KUBECTL delete pod"
-                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME || echo FAILED KUBECTL delete service"
-                    sh "kubectl delete service $EPHTEST_CONTAINER_NAME-jacoco || echo FAILED KUBECTL delete service - jacoco"
+                    // sh "kubectl delete pod $EPHTEST_CONTAINER_NAME || echo FAILED KUBECTL delete pod"
+                    // sh "kubectl delete service $EPHTEST_CONTAINER_NAME || echo FAILED KUBECTL delete service"
+                    // sh "kubectl delete service $EPHTEST_CONTAINER_NAME-jacoco || echo FAILED KUBECTL delete service - jacoco"
                 }
             }
         }
