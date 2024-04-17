@@ -28,14 +28,14 @@
 
         <junit.version>5.8.2</junit.version> <!-- provided by spring-boot-starter-test pom -->
         <jmockit.version>1.49</jmockit.version>
-        <jacoco.version>0.8.10</jacoco.version>
-        <selenium.version>4.10.0</selenium.version>
-        <selenium-htmlunit.version>4.10.0</selenium-htmlunit.version>
-        <pitest.version>1.14.1</pitest.version>
-        <pitest-junit5.version>1.2.0</pitest-junit5.version>
-        <jmeter-plugin.version>3.5.0</jmeter-plugin.version>
+        <jacoco.version>0.8.12</jacoco.version>
+        <selenium.version>4.19.1</selenium.version>
+        <selenium-htmlunit.version>4.13.0</selenium-htmlunit.version>
+        <pitest.version>1.16.0</pitest.version>
+        <pitest-junit5.version>1.2.1</pitest-junit5.version>
+        <jmeter-plugin.version>3.8.0</jmeter-plugin.version>
         <jmeter.version>5.4.3</jmeter.version>
-        <dependency-check.version>8.3.1</dependency-check.version>
+        <dependency-check.version>9.1.0</dependency-check.version>
 
         <jmockit.path>${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar</jmockit.path>
         <jmockit.agentConfig>-javaagent:${jmockit.path}</jmockit.agentConfig>
@@ -53,9 +53,9 @@
 
         <!-- maven standard plugins-->
         <compiler.version>3.8.1</compiler.version>
-        <surefire.version>2.22.2</surefire.version>
-        <failsafe.version>2.22.2</failsafe.version>
-        <dependency.version>3.1.1</dependency.version>
+        <surefire.version>3.2.5</surefire.version>
+        <failsafe.version>3.2.5</failsafe.version>
+        <dependency.version>3.6.1</dependency.version>
     </properties>
 
     <dependencies>
